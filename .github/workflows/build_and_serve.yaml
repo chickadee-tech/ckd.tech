@@ -1,0 +1,36 @@
+name: Build & Serve
+# This workflow is triggered on pushes to the repository.
+on:
+  push:
+    branches: main
+  pull_request:
+
+jobs:
+  build:
+    name: Build & Serve
+    # This job runs on Linux
+    runs-on: ubuntu-20.04
+    steps:
+      # - name: Dump GitHub context
+      #   env:
+      #     GITHUB_CONTEXT: ${{ toJson(github) }}
+      #   run: echo "$GITHUB_CONTEXT"
+      - uses: actions/checkout@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+
+      - name: Install dependencies
+        run: python3 -m pip install -r ./requirements.txt
+
+      - name: Build the site
+        run: python3 generate_redirects.py
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./site
+        if: github.ref == 'refs/heads/main' && github.repository_owner == 'chickadee-tech'
