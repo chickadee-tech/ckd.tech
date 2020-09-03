@@ -2,3 +2,6 @@
   from = "/gb-bo/v1"
   to = "https://github.com/chickadee-tech/pygb/tree/byte_breakout"
 
+[[redirects]]
+  from = "/"
+  to = "https://chickadee.tech"
